@@ -1,0 +1,217 @@
+:root{
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-600: #2563eb;
+  --accent-700: #1e40af;
+  --success: #059669;
+  --danger: #dc2626;
+  --border: #e6edf3;
+  --shadow: rgba(16,24,40,0.04);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--bg);color:#0f172a}
+#root{min-height:100vh}
+
+.app-container{max-width:1100px;margin:0 auto;padding:28px}
+
+/* Header */
+.app-header{position:sticky;top:0;background:rgba(255,255,255,0.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:50}
+.app-header .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:14px 28px}
+
+/* Like animation and liked state */
+.action-pill svg, .like-pill svg { transition: transform .18s cubic-bezier(.2,.9,.2,1), color .18s; }
+.like-pill.liked, .action-pill.like-pill.liked { color: var(--danger); background: rgba(220,38,38,0.06); border-color:#fee2e2 }
+.like-pill.liked svg, .action-pill.like-pill.liked svg { transform: scale(1.08); }
+.pill-count{transition: transform .18s;}
+.like-pill.liked .pill-count, .action-pill.like-pill.liked .pill-count { transform: scale(1.04); }
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--accent);font-size:18px}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.brand .brand-text{font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-style:italic; letter-spacing:0.6px; font-weight:900; font-size:18px; color:var(--accent);}
+
+/* Comment & Reply input visual improvements */
+.comment-textarea, .reply-textarea, .post-create textarea {
+  width:100%;
+  min-height:48px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #eef6fb;
+  background:#fff;
+  transition:box-shadow .15s, border-color .15s;
+  outline:none;
+}
+.comment-textarea:focus, .reply-textarea:focus, .post-create textarea:focus {
+  box-shadow:0 8px 20px rgba(37,99,235,0.08);
+  border-color:var(--accent-600);
+}
+
+/* Move reply / commit actions to the right and make a clean badge for comment likes */
+.comment-actions{display:flex;align-items:center;gap:8px}
+.comment-like-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #f1f5f9;color:var(--muted);font-weight:800}
+
+/* Remove interactive affordance for comment likes (only posts are likeable) */
+.comment .like-pill, .comment .btn-like{display:none}
+.user-badge{display:flex;align-items:center;gap:8px;background:#f1f5f9;padding:8px 12px;border-radius:999px}
+.logout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer}
+
+/* Keep logout button compact and inline when inside the user badge */
+.user-badge .logout-btn{padding:6px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);background:transparent}
+.user-badge .logout-btn:hover{background:rgba(0,0,0,0.03);color:var(--accent-700)}
+
+/* Layout */
+.grid{display:grid;grid-template-columns:1fr;gap:28px}
+@media(min-width:1024px){.grid{grid-template-columns:2fr 1fr}}
+
+/* Card */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 6px 18px var(--shadow)}
+
+/* Login */
+.login-page{min-height:80vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.login-card{max-width:420px;width:100%;padding:40px;border-radius:14px;box-shadow:0 22px 48px rgba(16,24,40,0.08);background:var(--card);border:1px solid var(--border)}
+.login-card .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;margin:0 auto 12px;font-weight:900}
+.login-card .title{font-size:24px;font-weight:900;color:#0f172a;text-align:center}
+.login-card .muted{color:var(--muted);margin-top:6px;text-align:center}
+.input{width:100%;padding:14px;border:1px solid #eef3f9;border-radius:12px;background:#fbfdff}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;border:none;cursor:pointer}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#7c3aed);color:#fff;font-weight:800;box-shadow:0 12px 24px rgba(37,99,235,0.14);width:100%}
+
+/* helper small muted */
+.small-muted{color:var(--muted);font-size:12px;text-align:center;margin-top:12px}
+
+/* errors and link toggles */
+.error-text{color:var(--danger);font-size:13px;margin-top:8px;text-align:center}
+.form-toggle{color:var(--accent);cursor:pointer;font-weight:700}
+
+
+
+/* Feed & Post */
+.post-create{background:var(--card);border:1px dashed #e6eef6;border-radius:12px;padding:20px}
+.post-create .label{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:0.6px;margin-bottom:12px}
+.post-create textarea{width:100%;min-height:84px;border-radius:12px;border:1px solid #eef6fb;padding:14px;background:#fbfdff;resize:none}
+.commit-btn{background:var(--accent);color:#fff;padding:10px 16px;border-radius:12px;border:none;box-shadow:0 12px 24px rgba(37,99,235,0.14);display:inline-flex;align-items:center;gap:8px}
+
+.post-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.post-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.avatar{width:46px;height:46px;border-radius:9999px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.post-content{color:#344155;margin:12px 0;line-height:1.6}
+.post-actions{display:flex;gap:12px;align-items:center;border-top:1px solid #f1f5f9;padding-top:12px;margin-top:8px}
+.action-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #f1f5f9;font-weight:700;color:var(--muted)}
+.like-pill{background:#fff5f5;border:1px solid #fee2e2;color:var(--danger)}
+.pill-count{display:inline-block;background:rgba(220,38,38,0.06);color:var(--danger);padding:4px 8px;border-radius:999px;font-weight:800;font-size:12px}
+.comment-pill{display:inline-block;background:#f8fafc;color:var(--muted);padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
+
+/* Comment bubble and spacing */
+.comment{margin-top:18px}
+.comment-bubble{background:#fff;border:1px solid #eef3f8;border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.03)}
+.comment-avatar{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#e0f2fe,#ddd6fe);display:flex;align-items:center;justify-content:center;color:#08488a;font-weight:800;font-size:12px}
+.comment-meta{display:flex;gap:10px;align-items:center;margin-bottom:8px;color:#0f172a;font-weight:800}
+.comment-text{color:#374151;margin-bottom:12px;line-height:1.5}
+.comment-actions{display:flex;align-items:center;gap:8px}
+.replies-list{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+
+/* Indent replies with a subtle left border and extra spacing (nested replies stack) */
+.reply .comment-bubble{margin-left:18px;border-left:3px solid #e6eef6;padding-left:12px}
+.reply .replies-list .comment-bubble{margin-left:14px}
+
+/* Visual improvements for like badge */
+.comment-like-badge{background:#fff;border-radius:8px;padding:6px 8px;border:1px solid #f1f5f9;color:var(--muted);font-weight:800;font-size:13px}
+.comment-like-badge svg{color:#ef4444}
+
+/* Reply button alignment: keep it directly next to the like badge */
+.comment-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start}
+.reply-btn{margin-left:8px;color:var(--accent);cursor:pointer;border:none;background:transparent;font-weight:800}
+
+/* On very small screens stack reply under the like badge to preserve space */
+@media (max-width:420px){
+  .comment-actions{flex-wrap:wrap}
+  .reply-btn{margin-left:0;margin-top:6px}
+}
+
+/* Reply textarea smaller and aligned */
+.reply-textarea{width:100%;min-height:60px;padding:10px;border-radius:10px;border:1px solid #eef6fb;background:#fff}
+
+/* Make spacing between comments clearer */
+.comment + .comment{margin-top:14px}
+
+/* Post-level add comment form */
+.post-add-comment{margin-bottom:12px}
+.post-add-comment-row{position:relative}
+.post-add-comment .comment-textarea{min-height:64px;padding-right:140px}
+.post-add-comment .post-add-comment-button{position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2}
+.post-add-comment .post-add-comment-button:disabled{opacity:0.6;cursor:not-allowed}
+
+/* On small screens stack the button below the textarea */
+@media (max-width:640px){
+  .post-add-comment .comment-textarea{padding-right:16px}
+  .post-add-comment .post-add-comment-button{position:static;transform:none;display:block;width:100%;margin-top:8px}
+}
+
+.post-add-comment .commit-btn{padding:8px 14px}
+
+/* Ensure focus doesn't render ugly line outlines */
+.comment-textarea:focus, .reply-textarea:focus, .post-create textarea:focus { outline: none; }
+
+/* Make sure comments list is full-width and not indented by replies */
+.comments-list{display:flex;flex-direction:column;gap:12px}
+
+
+/* Feed heading styling */
+.feed-heading{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:900;color:#0f172a;margin-bottom:6px}
+.feed-heading svg{color:var(--accent)}
+
+
+/* Comment */
+.comment{margin-top:12px}
+.comment .meta{display:flex;gap:8px;align-items:center;margin-bottom:6px;color:#0f172a;font-weight:700}
+.comment .text{color:#475569}
+.reply-form textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef6}
+
+/* Leaderboard */
+.leaderboard-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #f1f5f9}
+.rank{width:26px;height:26px;border-radius:999px;background:#f8fafc;display:flex;align-items:center;justify-content:center;font-weight:800}
+.leaderboard-footer{background:var(--accent);color:#fff;padding:12px;text-align:center;font-weight:800;border-bottom-left-radius:12px;border-bottom-right-radius:12px}
+.leaderboard-footer p{margin:0;font-size:12px}
+.rank.top-rank{background:#eff6ff;color:var(--accent)}
+.leaderboard-header h2{font-size:13px;font-weight:900;letter-spacing:0.6px}
+/* Sidebar helpers */
+.sidebar-card{overflow:hidden;position:sticky;top:28px}
+
+/* Desktop: pin leaderboard so it doesn't slide while scrolling */
+@media (min-width:1024px){
+  .sidebar-card{
+    position:fixed;
+    top:88px;
+    right:calc((100% - 1100px)/2 + 16px);
+    width:280px;
+    z-index:40;
+    box-shadow:0 10px 30px rgba(2,6,23,0.06);
+  }
+}
+
+/* Leaderboard header: stylish */
+.leaderboard-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,#ffffff,#f8fbff);gap:12px}
+.leaderboard-header h2{display:flex;align-items:center;gap:8px;font-weight:900;color:var(--accent-700);font-size:15px;margin:0}
+.leaderboard-header .trophy-icon{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;color:#b45309;box-shadow:0 4px 12px rgba(2,6,23,0.06)}
+.time-badge{background:linear-gradient(90deg,#eff6ff,#eef2ff);color:var(--accent-700);padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
+
+.leaderboard-list{ }
+.rank.top-rank{background:#fff7ed;color:#92400e}
+/* Utilities */
+.text-muted{color:var(--muted)}
+.small{font-size:12px}
+
+/* Like button */
+.btn-like{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer}
+.btn-like.liked{color:var(--danger);background:rgba(220,38,38,0.06)}
+
+/* Misc */
+.container-row{display:flex;gap:20px}
+.center{text-align:center}
+
+/* Animations */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:28px;height:28px;border-radius:999px;border:3px solid #cfe7ff;border-top-color:var(--accent);animation:spin 1s linear infinite}
