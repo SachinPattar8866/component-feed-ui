@@ -51,7 +51,7 @@ async function refreshToken() {
 
   isRefreshing = true;
   try {
-    const res = await api.post('/token/refresh/', { refresh: refreshToken });
+    const res = await api.post('/api/token/refresh/', { refresh: refreshToken });
     const newAccess = res.data.access;
     localStorage.setItem('access_token', newAccess);
     api.defaults.headers.common['Authorization'] = 'Bearer ' + newAccess;
@@ -163,6 +163,6 @@ export const getLeaderboard = () => api.get('/leaderboard/top_users/');
 
 // Auth API
 export const login = (username, password) => 
-  api.post('/token/', { username, password });
+  api.post('/api/token/', { username, password });
 
 export default api;
