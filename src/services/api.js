@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_BASE_URL,
+  withCredentials: true,
 });
 
 // If an access token exists on load, set it as default so requests include it immediately
@@ -12,7 +13,7 @@ if (existingToken) {
   api.defaults.headers.common['Authorization'] = `Bearer ${existingToken}`;
 }
 
-// Helper: decode JWT payload safely
+// Helper: decode JWT payload safely  
 function decodeJWT(token) {
   try {
     const payload = token.split('.')[1];
