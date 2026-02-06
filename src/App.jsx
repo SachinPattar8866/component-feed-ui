@@ -23,9 +23,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
 
-  // Controlled login inputs to avoid uncontrolled -> controlled warning
-  const [loginUsername, setLoginUsername] = useState('admin');
-  const [loginPassword, setLoginPassword] = useState('admin123');
+  // Controlled login inputs (start empty to avoid accidental submissions)
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   // Register UI
   const [showRegister, setShowRegister] = useState(false);
