@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_ROOT = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -51,7 +52,7 @@ async function refreshToken() {
 
   isRefreshing = true;
   try {
-    const res = await api.post('/api/token/refresh/', { refresh: refreshToken });
+    const res = await api.post(`${API_ROOT}/token/refresh/`, { refresh: refreshToken });
     const newAccess = res.data.access;
     localStorage.setItem('access_token', newAccess);
     api.defaults.headers.common['Authorization'] = 'Bearer ' + newAccess;
@@ -122,11 +123,11 @@ api.interceptors.response.use(
 );
 
 // Posts API
-export const getPosts = () => api.get('/posts/');
-export const getPost = (id) => api.get(`/posts/${id}/`);
-export const createPost = (content) => api.post('/posts/', { content });
-export const likePost = (id) => api.post(`/posts/${id}/like/`);
-export const unlikePost = (id) => api.post(`/posts/${id}/unlike/`);
+export const getPosts = () => api.get(`${API_ROOT}/posts/`);
+export const getPost = (id) => api.get(`${API_ROOT}/posts/${id}/`);
+export const createPost = (content) => api.post(`${API_ROOT}/posts/`, { content });
+export const likePost = (id) => api.post(`${API_ROOT}/posts/${id}/like/`);
+export const unlikePost = (id) => api.post(`${API_ROOT}/posts/${id}/unlike/`);
 
 // User registration (supports either object or (username, password) signature)
 export const register = async (usernameOrObj, password) => {
@@ -136,12 +137,12 @@ export const register = async (usernameOrObj, password) => {
 
   // Try common registration endpoints and provide helpful error when unavailable
   try {
-    return await api.post('/users/', payload);
+    return await api.post(`${API_ROOT}/users/`, payload);
   } catch (err) {
     // If 404, try a common alternative path before giving up
     if (err.response && err.response.status === 404) {
       try {
-        return await api.post('/register/', payload);
+        return await api.post(`${API_ROOT}/register/`, payload);
       } catch (err2) {
         // rethrow original error for more context
         throw err;
@@ -152,17 +153,17 @@ export const register = async (usernameOrObj, password) => {
 };
 
 // Comments API
-export const getComments = () => api.get('/comments/');
+export const getComments = () => api.get(`${API_ROOT}/comments/`);
 export const createComment = (postId, content, parentId = null) => 
-  api.post('/comments/', { post: postId, content, parent: parentId });
-export const likeComment = (id) => api.post(`/comments/${id}/like/`);
-export const unlikeComment = (id) => api.post(`/comments/${id}/unlike/`);
+  api.post(`${API_ROOT}/comments/`, { post: postId, content, parent: parentId });
+export const likeComment = (id) => api.post(`${API_ROOT}/comments/${id}/like/`);
+export const unlikeComment = (id) => api.post(`${API_ROOT}/comments/${id}/unlike/`);
 
 // Leaderboard API
-export const getLeaderboard = () => api.get('/leaderboard/top_users/');
+export const getLeaderboard = () => api.get(`${API_ROOT}/leaderboard/top_users/`);
 
 // Auth API
 export const login = (username, password) => 
-  api.post('/api/token/', { username, password });
+  api.post(`${API_ROOT}/token/`, { username, password });
 
 export default api;
