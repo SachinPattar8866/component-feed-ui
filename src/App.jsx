@@ -42,6 +42,10 @@ export default function App() {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [showRegConfirm, setShowRegConfirm] = useState(false);
+  // Focus tracking to show eye only for focused or filled fields
+  const [loginPassFocused, setLoginPassFocused] = useState(false);
+  const [regPassFocused, setRegPassFocused] = useState(false);
+  const [regConfirmFocused, setRegConfirmFocused] = useState(false);
 
   // Small flash message for successful registration/logout
   const [flashMsg, setFlashMsg] = useState('');
@@ -258,16 +262,16 @@ export default function App() {
                   <div style={{display:'flex',gap:8,marginBottom:12}}>
                     <div style={{flex:1, position:'relative'}}>
                       <label className="small text-muted" style={{display:'block',marginBottom:6}}>Password</label>
-                      <input value={regPassword} onChange={(e)=>setRegPassword(e.target.value)} required type={showRegPassword ? 'text' : 'password'} className="input" placeholder="Password" />
-                      {regPassword.length > 0 && (
-                        <button type="button" onClick={() => setShowRegPassword(s => !s)} aria-label={showRegPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showRegPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                      <input value={regPassword} onChange={(e)=>setRegPassword(e.target.value)} onFocus={() => setRegPassFocused(true)} onBlur={() => setRegPassFocused(false)} required type={showRegPassword ? 'text' : 'password'} className="input" placeholder="Password" style={{paddingRight:44}} />
+                      {(regPassword.length > 0 || regPassFocused) && (
+                        <button type="button" onClick={() => setShowRegPassword(s => !s)} aria-label={showRegPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer', padding:6}}>{showRegPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
                       )}
                     </div>
                     <div style={{flex:1, position:'relative'}}>
                       <label className="small text-muted" style={{display:'block',marginBottom:6}}>Confirm</label>
-                      <input value={regConfirm} onChange={(e)=>setRegConfirm(e.target.value)} required type={showRegConfirm ? 'text' : 'password'} className="input" placeholder="Confirm" />
-                      {regConfirm.length > 0 && (
-                        <button type="button" onClick={() => setShowRegConfirm(s => !s)} aria-label={showRegConfirm ? 'Hide confirm' : 'Show confirm'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showRegConfirm ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                      <input value={regConfirm} onChange={(e)=>setRegConfirm(e.target.value)} onFocus={() => setRegConfirmFocused(true)} onBlur={() => setRegConfirmFocused(false)} required type={showRegConfirm ? 'text' : 'password'} className="input" placeholder="Confirm" style={{paddingRight:44}} />
+                      {(regConfirm.length > 0 || regConfirmFocused) && (
+                        <button type="button" onClick={() => setShowRegConfirm(s => !s)} aria-label={showRegConfirm ? 'Hide confirm' : 'Show confirm'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer', padding:6}}>{showRegConfirm ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
                       )}
                     </div>
                   </div>
@@ -285,9 +289,9 @@ export default function App() {
                   </div>
                   <div style={{marginBottom:12, position:'relative'}}>
                     <label className="small text-muted" style={{display:'block',marginBottom:6}}>Password</label>
-                    <input name="password" type={showLoginPassword ? 'text' : 'password'} required value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} className="input" placeholder="Enter password" />
-                    {loginPassword.length > 0 && (
-                      <button type="button" onClick={() => setShowLoginPassword(s => !s)} aria-label={showLoginPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showLoginPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                    <input name="password" type={showLoginPassword ? 'text' : 'password'} required value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} onFocus={() => setLoginPassFocused(true)} onBlur={() => setLoginPassFocused(false)} className="input" placeholder="Enter password" style={{paddingRight:44}} />
+                    {(loginPassword.length > 0 || loginPassFocused) && (
+                      <button type="button" onClick={() => setShowLoginPassword(s => !s)} aria-label={showLoginPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer', padding:6}}>{showLoginPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
                     )}
                   </div>
 

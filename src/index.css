@@ -70,6 +70,15 @@ body{min-height:100vh;background:var(--bg);color:#0f172a}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 6px 18px var(--shadow)}
 
 /* Login */
+/* Prevent the blinking text caret from appearing on non-editable elements inside the login/register area.
+   Ensure inputs/showing elements still render a visible caret. */
+.login-page *:not(input):not(textarea):not([contenteditable="true"]) { caret-color: transparent; }
+.login-page input, .login-page textarea { caret-color: auto; }
+/* Hide browser built-in password reveal/clear controls where possible */
+.login-page input[type="password"]::-ms-reveal, .login-page input[type="password"]::-ms-clear { display: none; }
+.login-page input[type="password"]::-webkit-textfield-decoration-container { display: none; }
+/* Ensure inputs have room for custom eye button */
+.login-page .input{ padding-right: 44px; }
 .login-page{min-height:80vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
 .login-card{max-width:420px;width:100%;padding:40px;border-radius:14px;box-shadow:0 22px 48px rgba(16,24,40,0.08);background:var(--card);border:1px solid var(--border)}
 .login-card .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;margin:0 auto 12px;font-weight:900}
