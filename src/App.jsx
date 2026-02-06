@@ -10,7 +10,9 @@ import {
   LogOut,
   ShieldCheck,
   ThumbsUp,
-  MessageCircle
+  MessageCircle,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { login, getPosts, getLeaderboard, createPost, createComment, likePost, unlikePost, register as apiRegister } from './services/api';
 import Comment from './components/Comment';
@@ -35,6 +37,14 @@ export default function App() {
   const [regConfirm, setRegConfirm] = useState('');
   const [registerLoading, setRegisterLoading] = useState(false);
   const [registerErr, setRegisterErr] = useState('');
+
+  // Password visibility toggles
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showRegConfirm, setShowRegConfirm] = useState(false);
+
+  // Small flash message for successful registration/logout
+  const [flashMsg, setFlashMsg] = useState('');
 
   // Per-post comment inputs
   const [commentInputs, setCommentInputs] = useState({});
@@ -128,14 +138,20 @@ export default function App() {
       // Pass the expected payload including email. api.register will try common endpoints.
       await apiRegister({ username: regUsername, email: regEmail, password: regPassword });
 
-      // After successful registration, log the user in automatically
-      const res = await login(regUsername, regPassword);
-      setUser({ access: res.data.access, username: regUsername });
-      localStorage.setItem('access_token', res.data.access);
-      localStorage.setItem('refresh_token', res.data.refresh);
-      localStorage.setItem('username', regUsername);
+      // After successful registration, do NOT auto-login. Instead show a success message and
+      // prefill the login username so the user can sign in manually.
       setShowRegister(false);
-      fetchData();
+      setLoginUsername(regUsername);
+      setLoginPassword('');
+      // Clear registration form fields
+      setRegUsername('');
+      setRegEmail('');
+      setRegPassword('');
+      setRegConfirm('');
+      setFlashMsg('Account created — please sign in');
+      setTimeout(() => setFlashMsg(''), 6000);
+      // Do not fetch data or set user here (no auto-login)
+      
     } catch (err) {
       console.error('Registration failed', err);
       if (err.response && err.response.status === 404) {
@@ -153,7 +169,15 @@ export default function App() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('username');
-  };
+    // Clear any lingering login inputs and show brief message
+    setLoginUsername('');
+    setLoginPassword('');
+    setShowLoginPassword(false);
+    setShowRegPassword(false);
+    setShowRegConfirm(false);
+    setFlashMsg('You have been logged out');
+    setTimeout(() => setFlashMsg(''), 4000);
+  }; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -220,6 +244,7 @@ export default function App() {
             </div>
 
             <form onSubmit={showRegister ? handleRegister : handleLogin} style={{marginTop:20}}>
+              {flashMsg && <div style={{marginBottom:12, padding:10, borderRadius:8, background:'#ecfdf5', color:'#065f46', textAlign:'center', fontWeight:700}}>{flashMsg}</div>}
               {showRegister ? (
                 <>
                   <div style={{marginBottom:12}}>
@@ -231,13 +256,19 @@ export default function App() {
                     <input value={regEmail} onChange={(e)=>setRegEmail(e.target.value)} required type="email" className="input" placeholder="Your email" />
                   </div>
                   <div style={{display:'flex',gap:8,marginBottom:12}}>
-                    <div style={{flex:1}}>
+                    <div style={{flex:1, position:'relative'}}>
                       <label className="small text-muted" style={{display:'block',marginBottom:6}}>Password</label>
-                      <input value={regPassword} onChange={(e)=>setRegPassword(e.target.value)} required type="password" className="input" placeholder="Password" />
+                      <input value={regPassword} onChange={(e)=>setRegPassword(e.target.value)} required type={showRegPassword ? 'text' : 'password'} className="input" placeholder="Password" />
+                      {regPassword.length > 0 && (
+                        <button type="button" onClick={() => setShowRegPassword(s => !s)} aria-label={showRegPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showRegPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                      )}
                     </div>
-                    <div style={{flex:1}}>
+                    <div style={{flex:1, position:'relative'}}>
                       <label className="small text-muted" style={{display:'block',marginBottom:6}}>Confirm</label>
-                      <input value={regConfirm} onChange={(e)=>setRegConfirm(e.target.value)} required type="password" className="input" placeholder="Confirm" />
+                      <input value={regConfirm} onChange={(e)=>setRegConfirm(e.target.value)} required type={showRegConfirm ? 'text' : 'password'} className="input" placeholder="Confirm" />
+                      {regConfirm.length > 0 && (
+                        <button type="button" onClick={() => setShowRegConfirm(s => !s)} aria-label={showRegConfirm ? 'Hide confirm' : 'Show confirm'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showRegConfirm ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                      )}
                     </div>
                   </div>
 
@@ -252,9 +283,12 @@ export default function App() {
                     <label className="small text-muted" style={{display:'block',marginBottom:6}}>Username</label>
                     <input name="username" required value={loginUsername} onChange={(e)=>setLoginUsername(e.target.value)} className="input" placeholder="Enter username" />
                   </div>
-                  <div style={{marginBottom:12}}>
+                  <div style={{marginBottom:12, position:'relative'}}>
                     <label className="small text-muted" style={{display:'block',marginBottom:6}}>Password</label>
-                    <input name="password" type="password" required value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} className="input" placeholder="Enter password" />
+                    <input name="password" type={showLoginPassword ? 'text' : 'password'} required value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} className="input" placeholder="Enter password" />
+                    {loginPassword.length > 0 && (
+                      <button type="button" onClick={() => setShowLoginPassword(s => !s)} aria-label={showLoginPassword ? 'Hide password' : 'Show password'} style={{position:'absolute', right:12, top:34, background:'transparent', border:'none', cursor:'pointer'}}>{showLoginPassword ? <EyeOff size={16}/> : <Eye size={16}/>}</button>
+                    )}
                   </div>
 
                   <div style={{display:'flex',justifyContent:'center'}}>
@@ -265,7 +299,18 @@ export default function App() {
             </form>
 
             <div style={{display:'flex',justifyContent:'center',marginTop:8}}>
-              <div className="small-muted" style={{cursor:'pointer'}} onClick={() => setShowRegister(v => !v)}>
+              <div className="small-muted" style={{cursor:'pointer'}} onClick={() => {
+                setShowRegister(v => !v);
+                // Reset register form state when toggling views
+                setRegisterErr('');
+                setRegUsername('');
+                setRegEmail('');
+                setRegPassword('');
+                setRegConfirm('');
+                setShowRegPassword(false);
+                setShowRegConfirm(false);
+                setFlashMsg('');
+              }}>
                 {showRegister ? 'Have an account? Sign in' : 'New? Create an account'}
               </div>
             </div>
