@@ -3,8 +3,8 @@ import { Lock, ShieldCheck } from 'lucide-react';
 import { login } from '../services/api';
 
 export default function LoginForm({ onLoginSuccess }) {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +24,10 @@ export default function LoginForm({ onLoginSuccess }) {
       
       onLoginSuccess({ access, username });
     } catch (err) {
-      setError('Invalid username or password');
+      // Show server-provided message when available to aid debugging
+      const serverMsg = err?.response?.data?.detail || err?.response?.data || err?.message;
+      console.error('Login error', err?.response || err);
+      setError(typeof serverMsg === 'string' ? serverMsg : 'Invalid username or password');
     } finally {
       setLoading(false);
     }
